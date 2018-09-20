@@ -2,7 +2,7 @@
   <div class="app-header">
     <div class="nav">
       <a class="logo" href="/">
-        <img v-bind:src="logo">
+        <img :src="logo">
       </a>
     </div>
   </div>
@@ -55,6 +55,7 @@ export default {
     text-align: center;
     background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
     box-shadow: 0 1px 3px rgba(50, 50, 50, 0.4);
+    z-index: 1000;
   }
 
   .app-header:after {
