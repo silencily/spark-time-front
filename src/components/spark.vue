@@ -32,7 +32,7 @@
     },
     data(){
       return {
-        lifetime: 30,  //默认三十秒
+        lifetime: 60,  //默认六十秒
         show: false
       }
     },

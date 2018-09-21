@@ -38,7 +38,7 @@ export default {
     position: fixed;
     bottom: 0;
     left: 0;
-    background: #000000;
+    background: rgba(0, 0, 0, 0.5);
   }
   .footer-container{
     margin: auto 50px;
