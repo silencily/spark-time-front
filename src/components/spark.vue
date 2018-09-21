@@ -23,16 +23,20 @@
         required: true
       },
       createdTime: {
-        type: Date,
+        type: [Date, String],
         required: true
       },
       content: {
         type: String
+      },
+      id: {
+        type: String,
+        required: true
       }
     },
     data(){
       return {
-        lifetime: 60,  //默认六十秒
+        lifetime: 600,  //默认六十秒
         show: false
       }
     },
@@ -56,7 +60,9 @@
         if (this.lifetime <= 0) {
           this.lifetime = 0
           clearInterval(int)
-          this.show = false
+          this.$emit('sparkDestroyed', this.id) //触发销毁事件
+          //this.show = false
+          this.$destroy()
         }
       }, 1000)
     },
@@ -68,9 +74,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .el-card{
+  .el-card {
     border: none;
   }
+
   .spark-content {
     position: absolute;
     top: 0px;

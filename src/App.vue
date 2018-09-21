@@ -3,18 +3,9 @@
     <Header/>
     <div class="main">
       <div class="waterfall">
-        <spark imgPath="/static/img/2.jpg" :createdTime="new Date(new Date().getTime()-20*1000)" content="哈哈" class="waterfall-item"/>
-        <spark imgPath="/static/img/3.jpg" :createdTime="new Date(new Date().getTime()-10*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/2.jpg" :createdTime="new Date(new Date().getTime()-5*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/5.jpg" :createdTime="new Date(new Date().getTime()-13*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/2.jpg" :createdTime="new Date(new Date().getTime()-17*1000)" content="哈哈" class="waterfall-item"/>
-        <spark imgPath="/static/img/3.jpg" :createdTime="new Date(new Date().getTime()-10*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/5.jpg" :createdTime="new Date(new Date().getTime()-5*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/2.jpg" :createdTime="new Date(new Date().getTime()-30*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/2.jpg" :createdTime="new Date(new Date().getTime()-8*1000)" content="哈哈" class="waterfall-item"/>
-        <spark imgPath="/static/img/5.jpg" :createdTime="new Date(new Date().getTime()-22*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/5.jpg" :createdTime="new Date(new Date().getTime()-5*1000)" class="waterfall-item"/>
-        <spark imgPath="/static/img/2.jpg" :createdTime="new Date(new Date().getTime()-26*1000)" class="waterfall-item"/>
+        <spark v-for="(value,key,index) in sparks" class="waterfall-item" :img-path="value.imgPath"
+               :created-time="value.createdTime" :content="value.content" :key="index" :id="key"
+               @sparkDestroyed="handleSparkDestroyed"/>
       </div>
     </div>
     <Footer/>
@@ -27,10 +18,64 @@
   import spark from './components/spark'
   export default {
     name: 'App',
+    data() {
+      return {
+        sparks: {},
+        dataGroup: '',
+        loadSwitch: true // 设置一个开关来避免重负请求数据
+      }
+    },
     components: {
       Header,
       Footer,
       spark
+    },
+    methods: {
+      initData(){
+        this.axios.get('./static/mock/data-init.json') // 真实环境中，后端会根据参数group返回新的图片数组，这里我用一个惊呆json文件模拟
+          .then(res => {
+            for (let key of Object.keys(res.data)) {
+              this.$set(this.sparks, key, res.data[key])
+            }
+          })
+      },
+      loadData(){
+        this.axios.get('./static/mock/data' + this.dataGroup + '.json')
+          .then(res => {
+            if (this.dataGroup == '') {
+              this.dataGroup = '2'
+            } else {
+              this.dataGroup = ''
+            }
+            for (let key of Object.keys(res.data)) {
+              this.$set(this.sparks, key, res.data[key])
+            }
+            this.loadSwitch = true
+          })
+      },
+      onScroll(){
+        let scrolled = document.documentElement.scrollHeight - document.documentElement.clientHeight - document.documentElement.scrollTop
+        if (scrolled <= 10) {
+          if (this.loadSwitch) {
+            console.log("handle scroll event")
+            this.loadSwitch = false
+            this.loadData()
+          }
+        }
+      },
+      handleSparkDestroyed(id){
+        console.log('the destroyed spark id in sparks: ' + id)
+        delete this.sparks[id]
+        console.log(this.sparks)
+      }
+    },
+    created(){
+      this.initData()
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+        window.addEventListener('scroll', this.onScroll)
+      })
     }
   }
 </script>
@@ -55,7 +100,7 @@
     margin: 0 auto;
   }
 
-  .waterfall-item{
+  .waterfall-item {
     break-inside: avoid;
     margin-bottom: 10px;
   }
