@@ -1,6 +1,6 @@
 <template>
   <transition enter-active-class="jackInTheBox" leave-active-class="flash">
-    <el-card :body-style="{ padding: '0px',position: 'relative'}" shadow="hover" class="animated" v-if="show">
+    <el-card :body-style="{ padding: '0px',position: 'relative'}" shadow="hover" class="animated">
       <img :src="imgPath" class="image" @click="showDetail">
       <div class="spark-content" v-show="content != null" @click="showDetail">
         <div class="spark-content-inner">{{content}}</div>
@@ -36,8 +36,7 @@
     },
     data(){
       return {
-        lifetime: 600,  //默认六十秒
-        show: false
+        lifetime: 60000  //默认六十秒
       }
     },
     methods: {
@@ -52,6 +51,9 @@
       }
     },
     created: function () {
+
+    },
+    mounted: function () {
       let passed = moment().diff(moment(this.createdTime), 'seconds')
       console.log('spark-' + this._uid + ' passed time:' + passed)
       this.lifetime = this.lifetime - passed
@@ -61,13 +63,8 @@
           this.lifetime = 0
           clearInterval(int)
           this.$emit('sparkDestroyed', this.id) //触发销毁事件
-          //this.show = false
-          this.$destroy()
         }
       }, 1000)
-    },
-    mounted: function () {
-      this.show = true
     }
   }
 </script>
