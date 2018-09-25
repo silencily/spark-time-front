@@ -11,19 +11,61 @@
         </el-col>
         <el-col :span="8">
           <div class="publish">
-            <el-button type="primary" icon="el-icon-circle-plus-outline" circle></el-button>
+            <el-button type="primary" icon="el-icon-circle-plus-outline" circle @click="showPublish"></el-button>
           </div>
         </el-col>
         <el-col :span="8">
           <div class="about">
-            <a href="#" @click="showAbout"><img class="avatar avatar-42" src="/static/img/avatar-195x195.png" width="42"
-                                                height="42"
-                                                alt=""></a>
+            <a href="#" @click="showAbout">
+              <img class="avatar avatar-42" src="/static/img/avatar-195x195.png"
+                   width="42"
+                   height="42"
+                   alt="">
+            </a>
             <p>About Silencily</p>
           </div>
         </el-col>
       </el-row>
     </div>
+    <el-dialog
+      title="发布火花"
+      :visible.sync="publishShown"
+      top="17vh"
+      width="45%"
+      :modal="false"
+      :close-on-click-modal="false"
+      center>
+      <div class="publish-dialog-content">
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-upload
+              class="publish-uploader"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="imageUrl" :src="imageUrl" class="publish-img">
+              <i v-else class="el-icon-plus publish-uploader-icon"></i>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+          </el-col>
+          <el-col :span="16">
+            <el-input
+              type="textarea"
+              class="publish-text"
+              maxlength="70"
+              minlength="2"
+              placeholder="发表火花文字（70字以内）">
+            </el-input>
+          </el-col>
+        </el-row>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="publishShown = false">取 消</el-button>
+        <el-button type="primary" @click="publishShown = false">发 布</el-button>
+      </span>
+    </el-dialog>
+
     <el-dialog
       title="关于 Silencily"
       :modal="false"
@@ -58,16 +100,16 @@
                                                                           aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                <a href="#" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                <a href="#" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                <a href="#" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
               </li>
             </ul>
           </div>
@@ -83,12 +125,32 @@
     name: 'Footer',
     data (){
       return {
-        aboutShown: false
+        aboutShown: false,
+        publishShown: false,
+        imageUrl: ''
       }
     },
     methods: {
       showAbout: function () {
         this.aboutShown = true
+      },
+      showPublish: function () {
+        this.publishShown = true
+      },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPGPNG = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isLt500K = file.size / 1024 / 1024 < 0.5;
+
+        if (!isJPGPNG) {
+          this.$message.error('上传火花图片只能是 JPG/PNG 格式!');
+        }
+        if (!isLt500K) {
+          this.$message.error('上传火花图片大小不能超过 500KB!');
+        }
+        return isJPGPNG && isJPGPNG;
       }
     }
   }
@@ -209,4 +271,43 @@
     color: #fff;
   }
 
+  .publish-uploader {
+    text-align: center;
+  }
+
+  .publish-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 115px;
+    height: 115px;
+    line-height: 115px;
+    text-align: center;
+  }
+
+  .publish-img {
+    width: 115px;
+    height: 115px;
+    display: block;
+  }
+
+  .el-upload__tip {
+    color: #FB383B;
+  }
+</style>
+<style>
+  .publish-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .publish-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+
+  .publish-text textarea {
+    height: 160px;
+  }
 </style>
