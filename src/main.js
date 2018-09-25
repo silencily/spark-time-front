@@ -6,6 +6,7 @@ import '../theme/index.css'
 import Element from 'element-ui'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import 'font-awesome/css/font-awesome.min.css'
 
 Vue.config.productionTip = false
 
