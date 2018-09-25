@@ -1,15 +1,31 @@
 <template>
-  <transition enter-active-class="jackInTheBox" leave-active-class="flash">
-    <el-card :body-style="{ padding: '0px',position: 'relative'}" shadow="hover" class="animated">
-      <img :src="imgPath" class="image" @click="showDetail">
-      <div class="spark-content" v-show="content != null" @click="showDetail">
-        <div class="spark-content-inner">{{content}}</div>
+  <div>
+    <transition enter-active-class="jackInTheBox" leave-active-class="flash">
+      <el-card :body-style="{ padding: '0px',position: 'relative'}" shadow="hover" class="animated">
+        <img :src="imgPath" class="image" @click="showDetail">
+        <div class="spark-content" v-show="content != null" @click="showDetail">
+          <div class="spark-content-inner">{{content}}</div>
+        </div>
+        <div class="spark-time">
+          <span>燃尽(秒)：<span :class="{'time-red':timeRed}">{{lifetime}}</span></span>
+        </div>
+      </el-card>
+    </transition>
+    <el-dialog
+      :visible.sync="detailShown"
+      top="10vh"
+      width="50%"
+      :close-on-click-modal="false"
+      center>
+      <div class="spark-dialog-content">
+        <img :src="imgPath" style="max-width: 100%">
+        <p>{{content}}</p>
       </div>
-      <div class="spark-time">
-        <span>燃尽(秒)：{{lifetime}}</span>
-      </div>
-    </el-card>
-  </transition>
+      <span slot="footer" class="dialog-footer">
+       <el-button type="primary" @click="detailShown = false">关 闭</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -36,12 +52,14 @@
     },
     data(){
       return {
-        lifetime: 60000  //默认六十秒
+        lifetime: 60000,  //默认六十秒
+        timeRed: false,
+        detailShown: false
       }
     },
     methods: {
       showDetail: function (event) {
-        alert("in showDetail")
+        this.detailShown = true
       }
     },
     computed: {},
@@ -59,6 +77,9 @@
       this.lifetime = this.lifetime - passed
       let int = setInterval(() => {
         this.lifetime--
+        if (this.lifetime <= 3 && !this.timeRed) {
+          this.timeRed = true
+        }
         if (this.lifetime <= 0) {
           this.lifetime = 0
           clearInterval(int)
@@ -75,6 +96,11 @@
     border: none;
   }
 
+  .time-red {
+    color: #FB383B;
+    font-weight: bold;
+  }
+
   .spark-content {
     position: absolute;
     top: 0px;
@@ -89,7 +115,8 @@
 
   .spark-content-inner {
     padding: 10px;
-    font-size: 18px;
+    font-size: 16px;
+    color: #ffffff;
   }
 
   .spark-time {
@@ -101,6 +128,11 @@
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
     padding: 3px 0;
+  }
+
+  .spark-dialog-content {
+    text-align: center;
+    color: #000000;
   }
 
   .image {
