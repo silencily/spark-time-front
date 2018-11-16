@@ -40,10 +40,10 @@
           <el-col :span="8">
             <el-upload
               class="publish-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="http://localhost:8080"
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
+              :on-success="handleImgSuccess"
+              :before-upload="beforeImgUpload">
               <img v-if="imageUrl" :src="imageUrl" class="publish-img">
               <i v-else class="el-icon-plus publish-uploader-icon"></i>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -100,16 +100,16 @@
                                                                           aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="https://www.facebook.com/seven.silencily" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                <a href="https://twitter.com/silencily" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                <a href="https://plus.google.com/+silencilyseven" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="#" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                <a href="https://www.linkedin.com/in/silencily-seven-915765175" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
               </li>
             </ul>
           </div>
@@ -137,10 +137,10 @@
       showPublish: function () {
         this.publishShown = true
       },
-      handleAvatarSuccess(res, file) {
+      handleImgSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
       },
-      beforeAvatarUpload(file) {
+      beforeImgUpload(file) {
         const isJPGPNG = file.type === 'image/jpeg' || file.type === 'image/png';
         const isLt500K = file.size / 1024 / 1024 < 0.5;
 
@@ -277,7 +277,7 @@
 
   .publish-uploader-icon {
     font-size: 28px;
-    color: #8c939d;
+    color: #FB383B;
     width: 115px;
     height: 115px;
     line-height: 115px;
@@ -296,7 +296,7 @@
 </style>
 <style>
   .publish-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
+    border: 1px dashed rgb(254, 195, 196);
     border-radius: 6px;
     cursor: pointer;
     position: relative;
@@ -304,7 +304,7 @@
   }
 
   .publish-uploader .el-upload:hover {
-    border-color: #409EFF;
+    border-color: #FB383B;
   }
 
   .publish-text textarea {
