@@ -2,7 +2,7 @@
   <div>
     <transition enter-active-class="jackInTheBox" leave-active-class="flash">
       <el-card :body-style="{ padding: '0px',position: 'relative'}" shadow="hover" class="animated">
-        <img :src="imgPath" class="image" @click="showDetail">
+        <img :src="'./spark/img/' + id" class="image" @click="showDetail" :alt="imgName">
         <div class="spark-content" v-show="content != null" @click="showDetail">
           <div class="spark-content-inner">{{content}}</div>
         </div>
@@ -18,7 +18,7 @@
       :close-on-click-modal="false"
       center>
       <div class="spark-dialog-content">
-        <img :src="imgPath" style="max-width: 100%">
+        <img :src="'./spark/img/' + id" style="max-width: 100%">
         <p>{{content}}</p>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -34,7 +34,7 @@
   export default {
     name: 'spark',
     props: {
-      imgPath: {
+      imgName: {
         type: String,
         required: true
       },

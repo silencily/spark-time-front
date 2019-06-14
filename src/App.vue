@@ -3,8 +3,8 @@
     <Header/>
     <div class="main">
       <div class="waterfall">
-        <spark v-for="(value,key,index) in sparks" class="waterfall-item" :img-path="value.imgPath"
-               :created-time="value.createdTime" :content="value.content" :key="index" :id="key"
+        <spark v-for="(value,key,index) in sparkContainer" class="waterfall-item" :img-name="value.img_name"
+               :created-time="value.created_time" :content="value.content" :key="index" :id="key"
                @sparkDestroyed="handleSparkDestroyed"/>
       </div>
     </div>
@@ -20,9 +20,8 @@
     name: 'App',
     data() {
       return {
-        sparks: {},
-        dataGroup: '',
-        loadSwitch: true // 设置一个开关来避免重负请求数据
+        sparkContainer: {},
+        loadTimer: null
       }
     },
     components: {
@@ -31,51 +30,33 @@
       spark
     },
     methods: {
-      initData(){
-        this.axios.get('./static/mock/data-init.json') // 真实环境中，后端会根据参数group返回新的图片数组，这里我用一个惊呆json文件模拟
-          .then(res => {
-            for (let key of Object.keys(res.data)) {
-              this.$set(this.sparks, key, res.data[key])
-            }
-          })
-      },
       loadData(){
-        this.axios.get('./static/mock/data' + this.dataGroup + '.json')
+        this.axios.get('./spark')
           .then(res => {
-            if (this.dataGroup == '') {
-              this.dataGroup = '2'
-            } else {
-              this.dataGroup = ''
+            for (let spark in res.data) {
+              this.$set(this.sparkContainer, spark._id, spark)
             }
-            for (let key of Object.keys(res.data)) {
-              this.$set(this.sparks, key, res.data[key])
-            }
-            this.loadSwitch = true
           })
-      },
-      onScroll(){
-        let scrolled = document.documentElement.scrollHeight - document.documentElement.clientHeight - document.documentElement.scrollTop
-        if (scrolled <= 10) {
-          if (this.loadSwitch) {
-            console.log("handle scroll event")
-            this.loadSwitch = false
-            this.loadData()
-          }
-        }
       },
       handleSparkDestroyed(id){
         console.log('the destroyed spark id in sparks: ' + id)
-        delete this.sparks[id]
-        console.log(this.sparks)
+        delete this.sparkContainer[id]
+        console.log(this.sparkContainer)
+      },
+      buildLoadTimer(){
+        this.loadTimer = setInterval(() => {
+          this.loadData()
+        }, 35 * 1000)
       }
     },
     created(){
-      this.initData()
+      this.loadData()
     },
     mounted: function () {
-      this.$nextTick(function () {
-        window.addEventListener('scroll', this.onScroll)
-      })
+      this.buildLoadTimer()
+    },
+    destroyed: function () {
+      clearInterval(this.loadTimer)
     }
   }
 </script>
