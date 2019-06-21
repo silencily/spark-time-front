@@ -37,7 +37,7 @@
       center>
       <div class="publish-dialog-content">
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="7">
             <el-upload
               class="publish-uploader"
               action="http://localhost:8080"
@@ -49,7 +49,7 @@
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
             </el-upload>
           </el-col>
-          <el-col :span="16">
+          <el-col :span="12">
             <el-input
               type="textarea"
               class="publish-text"
@@ -57,6 +57,29 @@
               minlength="2"
               placeholder="发表火花文字（70字以内）">
             </el-input>
+          </el-col>
+          <el-col :span="5">
+            <div>
+              <el-image :fit="'fill'" style="width:100%;height: 50px;cursor: pointer;"  v-on:click="getCaptcha" :src="captcha">
+                <div slot="placeholder" class="image-slot">
+                  加载中<span class="dot">...</span>
+                </div>
+                <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+            </div>
+            <div style="color: #FB383B;font-size: 12px;text-align: center;">
+              <span>点击图片更换验证码</span>
+            </div>
+            <div style="margin-top: 10px;">
+              <el-input
+                placeholder="验证码"
+                v-model="input"
+                clearable>
+              </el-input>
+            </div>
+
           </el-col>
         </el-row>
       </div>
@@ -100,16 +123,19 @@
                                                                           aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="https://www.facebook.com/seven.silencily" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="https://www.facebook.com/seven.silencily" target="_blank"><i class="fa fa-facebook"
+                                                                                      aria-hidden="true"></i></a>
               </li>
               <li>
                 <a href="https://twitter.com/silencily" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="https://plus.google.com/+silencilyseven" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                <a href="https://plus.google.com/+silencilyseven" target="_blank"><i class="fa fa-google-plus"
+                                                                                     aria-hidden="true"></i></a>
               </li>
               <li>
-                <a href="https://www.linkedin.com/in/silencily-seven-915765175" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                <a href="https://www.linkedin.com/in/silencily-seven-915765175" target="_blank"><i
+                  class="fa fa-linkedin" aria-hidden="true"></i></a>
               </li>
             </ul>
           </div>
@@ -127,7 +153,8 @@
       return {
         aboutShown: false,
         publishShown: false,
-        imageUrl: ''
+        imageUrl: '',
+        captcha:''
       }
     },
     methods: {
@@ -136,6 +163,7 @@
       },
       showPublish: function () {
         this.publishShown = true
+        this.captcha = 'http://localhost:8080/spark/captcha'
       },
       handleImgSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
@@ -151,6 +179,9 @@
           this.$message.error('上传火花图片大小不能超过 500KB!');
         }
         return isJPGPNG && isJPGPNG;
+      },
+      getCaptcha(){
+        this.captcha = 'http://localhost:8080/spark/captcha?v='+new Date().getTime();
       }
     }
   }
@@ -309,5 +340,16 @@
 
   .publish-text textarea {
     height: 160px;
+  }
+
+  .image-slot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #f5f7fa;
+    color: #909399;
+    font-size: 14px;
   }
 </style>
