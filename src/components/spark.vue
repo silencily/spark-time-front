@@ -52,7 +52,7 @@
     },
     data(){
       return {
-        lifetime: 60000,  //默认六十秒
+        lifetime: 60,  //默认六十秒
         timeRed: false,
         detailShown: false
       }
@@ -75,17 +75,25 @@
       let passed = moment().diff(moment(this.createdTime), 'seconds')
       console.log('spark-' + this._uid + ' passed time:' + passed)
       this.lifetime = this.lifetime - passed
-      let int = setInterval(() => {
+      if (this.lifetime <= 3 && !this.timeRed) {
+        this.timeRed = true
+      }
+      if (this.lifetime <= 0) {
+        this.lifetime = 0
+      }
+      var timer = setInterval(() => {
         this.lifetime--
         if (this.lifetime <= 3 && !this.timeRed) {
           this.timeRed = true
         }
         if (this.lifetime <= 0) {
           this.lifetime = 0
-          clearInterval(int)
           this.$emit('sparkDestroyed', this.id) //触发销毁事件
         }
       }, 1000)
+      this.$once('hook:beforeDestroy', function () {
+        clearInterval(timer)
+      })
     }
   }
 </script>

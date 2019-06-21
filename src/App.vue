@@ -4,7 +4,7 @@
     <div class="main">
       <div class="waterfall">
         <spark v-for="(value,key,index) in sparkContainer" class="waterfall-item" :img-name="value.img_name"
-               :created-time="value.created_time" :content="value.content" :key="index" :id="key"
+               :created-time="value.created_time" :content="value.content" :key="value._id" :id="value._id"
                @sparkDestroyed="handleSparkDestroyed"/>
       </div>
     </div>
@@ -20,8 +20,7 @@
     name: 'App',
     data() {
       return {
-        sparkContainer: {},
-        loadTimer: null
+        sparkContainer: {}
       }
     },
     components: {
@@ -32,21 +31,22 @@
     methods: {
       loadData(){
         this.axios.get('./spark')
-          .then(res => {
-            for (let spark in res.data) {
-              this.$set(this.sparkContainer, spark._id, spark)
+          .then((res) => {
+            for (let spark of res.data) {
+                this.$set(this.sparkContainer, spark._id, spark)
             }
           })
       },
       handleSparkDestroyed(id){
-        console.log('the destroyed spark id in sparks: ' + id)
-        delete this.sparkContainer[id]
-        console.log(this.sparkContainer)
+        this.$delete(this.sparkContainer,id)
       },
       buildLoadTimer(){
-        this.loadTimer = setInterval(() => {
+        var loadTimer = setInterval(() => {
           this.loadData()
-        }, 35 * 1000)
+        }, 65 * 1000)
+        this.$once('hook:beforeDestroy', function () {
+          clearInterval(loadTimer)
+        })
       }
     },
     created(){
@@ -54,9 +54,6 @@
     },
     mounted: function () {
       this.buildLoadTimer()
-    },
-    destroyed: function () {
-      clearInterval(this.loadTimer)
     }
   }
 </script>
