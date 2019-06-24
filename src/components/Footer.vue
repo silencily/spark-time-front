@@ -60,11 +60,12 @@
           </el-col>
           <el-col :span="5">
             <div>
-              <el-image :fit="'fill'" style="width:100%;height: 50px;cursor: pointer;"  v-on:click="getCaptcha" :src="captcha">
+              <el-image :fit="'fill'" style="width:100%;height: 50px;cursor: pointer;" v-on:click="getCaptcha"
+                        :src="captcha">
                 <div slot="placeholder" class="image-slot">
                   加载中<span class="dot">...</span>
                 </div>
-                <div slot="error" class="image-slot">
+                <div slot="error" class="image-slot" v-on:click="getCaptcha">
                   <i class="el-icon-picture-outline"></i>
                 </div>
               </el-image>
@@ -75,7 +76,6 @@
             <div style="margin-top: 10px;">
               <el-input
                 placeholder="验证码"
-                v-model="input"
                 clearable>
               </el-input>
             </div>
@@ -154,7 +154,7 @@
         aboutShown: false,
         publishShown: false,
         imageUrl: '',
-        captcha:''
+        captcha: ''
       }
     },
     methods: {
@@ -163,7 +163,7 @@
       },
       showPublish: function () {
         this.publishShown = true
-        this.captcha = 'http://localhost:8080/spark/captcha'
+        this.getCaptcha();
       },
       handleImgSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
@@ -181,7 +181,12 @@
         return isJPGPNG && isJPGPNG;
       },
       getCaptcha(){
-        this.captcha = 'http://localhost:8080/spark/captcha?v='+new Date().getTime();
+        this.axios.get('./spark/captcha?v=' + new Date().getTime()).then(res => {
+          this.captcha = res.data
+        }).catch(err => {
+          console.log(err)
+          this.captcha = new Date().getTime() + ''
+        })
       }
     }
   }
