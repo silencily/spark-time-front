@@ -38,12 +38,15 @@
       <div class="publish-dialog-content">
         <el-row :gutter="10">
           <el-col :span="7">
-            <el-upload
-              class="publish-uploader"
-              action="http://localhost:8080"
-              :show-file-list="false"
-              :on-success="handleImgSuccess"
-              :before-upload="beforeImgUpload">
+            <el-upload ref="publish"
+                       class="publish-uploader"
+                       action="./spark"
+                       :data="publishData"
+                       :show-file-list="false"
+                       :on-success="handlePublishSuccess"
+                       :on-error="handlePublishError"
+                       :on-change="handleImgAdded"
+                       :before-upload="beforePublish" :accept="'image/jpeg,image/png'" :auto-upload="false">
               <img v-if="imageUrl" :src="imageUrl" class="publish-img">
               <i v-else class="el-icon-plus publish-uploader-icon"></i>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -52,7 +55,7 @@
           <el-col :span="12">
             <el-input
               type="textarea"
-              class="publish-text"
+              class="publish-text" v-model="sparkContent"
               maxlength="70"
               minlength="2"
               placeholder="发表火花文字（70字以内）">
@@ -76,7 +79,7 @@
             <div style="margin-top: 10px;">
               <el-input
                 placeholder="验证码"
-                clearable>
+                clearable v-model="validCode">
               </el-input>
             </div>
 
@@ -85,7 +88,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="publishShown = false">取 消</el-button>
-        <el-button type="primary" @click="publishShown = false">发 布</el-button>
+        <el-button type="primary" :loading="publishing" @click="publish">发 布</el-button>
       </span>
     </el-dialog>
 
@@ -154,7 +157,11 @@
         aboutShown: false,
         publishShown: false,
         imageUrl: '',
-        captcha: ''
+        captcha: '',
+        sparkContent: '',
+        validCode: '',
+        publishData: {},
+        publishing: false
       }
     },
     methods: {
@@ -165,10 +172,22 @@
         this.publishShown = true
         this.getCaptcha();
       },
-      handleImgSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
+      handlePublishSuccess(res, file) {
+        this.$message.success('发布火花成功！');
+        this.$refs.publish.clearFiles();
+        this.sparkContent = ''
+        this.validCode = ''
+        this.publishData = {}
+        this.publishShown = false
+        this.publishing = false
+        this.imageUrl = 'reset'
       },
-      beforeImgUpload(file) {
+      handlePublishError(err, file, fileList){
+        this.$message.error('发布火花失败，请稍后重试！');
+        this.publishing = false
+        this.imageUrl = 'reset'
+      },
+      beforePublish(file) {
         const isJPGPNG = file.type === 'image/jpeg' || file.type === 'image/png';
         const isLt500K = file.size / 1024 / 1024 < 0.5;
 
@@ -178,7 +197,16 @@
         if (!isLt500K) {
           this.$message.error('上传火花图片大小不能超过 500KB!');
         }
+
+
         return isJPGPNG && isJPGPNG;
+      },
+      handleImgAdded(file, fileList){
+        if (this.imageUrl === 'reset') {
+          this.imageUrl = ''
+        } else {
+          this.imageUrl = URL.createObjectURL(file.raw);
+        }
       },
       getCaptcha(){
         this.axios.get('./spark/captcha?v=' + new Date().getTime()).then(res => {
@@ -187,6 +215,11 @@
           console.log(err)
           this.captcha = new Date().getTime() + ''
         })
+      },
+      publish(){
+        this.publishing = true
+        this.publishData = {"sparkContent": this.sparkContent, "validCode": this.validCode}
+        this.$refs.publish.submit();
       }
     }
   }
