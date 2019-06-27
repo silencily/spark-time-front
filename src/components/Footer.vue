@@ -40,6 +40,7 @@
           <el-col :span="7">
             <el-upload ref="publish"
                        class="publish-uploader"
+                       name="sparkImage"
                        action="./spark"
                        :data="publishData"
                        :show-file-list="false"
@@ -160,8 +161,16 @@
         captcha: '',
         sparkContent: '',
         validCode: '',
-        publishData: {},
         publishing: false
+      }
+    },
+    computed: {
+      publishData: {
+        get: function () {
+          return {"sparkContent": this.sparkContent, "validCode": this.validCode}
+        },
+        set: function () {
+        }
       }
     },
     methods: {
@@ -173,19 +182,29 @@
         this.getCaptcha();
       },
       handlePublishSuccess(res, file) {
-        this.$message.success('发布火花成功！');
-        this.$refs.publish.clearFiles();
-        this.sparkContent = ''
-        this.validCode = ''
-        this.publishData = {}
-        this.publishShown = false
-        this.publishing = false
-        this.imageUrl = 'reset'
+        let code = res.code
+        let message = res.message
+        if (code == "1") {
+          this.$message.success(message);
+          this.$refs.publish.clearFiles();
+          this.sparkContent = ''
+          this.validCode = ''
+          this.publishShown = false
+          this.publishing = false
+          this.imageUrl = 'reset'
+        } else {
+          this.$message.error(message);
+          this.publishing = false
+          this.imageUrl = 'reset'
+          this.getCaptcha();
+        }
+
       },
       handlePublishError(err, file, fileList){
         this.$message.error('发布火花失败，请稍后重试！');
         this.publishing = false
         this.imageUrl = 'reset'
+        this.getCaptcha();
       },
       beforePublish(file) {
         const isJPGPNG = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -193,13 +212,13 @@
 
         if (!isJPGPNG) {
           this.$message.error('上传火花图片只能是 JPG/PNG 格式!');
+          return false
         }
         if (!isLt500K) {
           this.$message.error('上传火花图片大小不能超过 500KB!');
+          return false
         }
-
-
-        return isJPGPNG && isJPGPNG;
+        return true;
       },
       handleImgAdded(file, fileList){
         if (this.imageUrl === 'reset') {
@@ -217,8 +236,20 @@
         })
       },
       publish(){
+        if (this.imageUrl === '') {
+          this.$message.error('请选择花火图片!');
+          return false
+        }
+        if (this.sparkContent === '') {
+          this.$message.error('请填写花火文字!');
+          return false
+        }
+        if (this.validCode === '') {
+          this.$message.error('请输入验证码!');
+          return false
+        }
         this.publishing = true
-        this.publishData = {"sparkContent": this.sparkContent, "validCode": this.validCode}
+
         this.$refs.publish.submit();
       }
     }
