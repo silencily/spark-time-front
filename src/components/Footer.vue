@@ -17,7 +17,7 @@
         <el-col :span="8">
           <div class="about">
             <a href="#" @click="showAbout">
-              <img class="avatar avatar-42" src="/static/img/avatar-195x195.png"
+              <img class="avatar avatar-42" src="/static/img/avatar.jpg"
                    width="42"
                    height="42"
                    alt="">
@@ -104,24 +104,25 @@
       <div class="about-dialog-content">
         <el-carousel :interval="4000" type="card" height="200px">
           <el-carousel-item lable="person">
-            <img src="/static/img/avatar-195x195.png"/>
+            <img src="/static/img/person.jpg" height="100%" width="100%"/>
             <h3>Silencily | A Person</h3>
           </el-carousel-item>
           <el-carousel-item lable="programmer">
-            <img src="/static/img/avatar-195x195.png"/>
+            <img src="/static/img/person.jpg" height="100%" width="100%"/>
             <h3>Silencily | A Programmer</h3>
           </el-carousel-item>
           <el-carousel-item lable="father">
-            <img src="/static/img/avatar-195x195.png"/>
+            <img src="/static/img/father.jpg" height="100%" width="100%"/>
             <h3>Silencily | A Father</h3>
           </el-carousel-item>
         </el-carousel>
+
         <div class="about-contacts">
           <div class="about-contacts-email">
             <a href="mailto:silencily@126.com"><i class="fa fa-envelope"></i>：silencily@126.com</a>
           </div>
           <div>
-            <ul>
+            <ul style="margin-bottom: 0px;">
               <li>
                 <a href="https://github.com/silencily" target="_blank"><i class="fa fa-github"
                                                                           aria-hidden="true"></i></a>
@@ -142,6 +143,10 @@
                   class="fa fa-linkedin" aria-hidden="true"></i></a>
               </li>
             </ul>
+          </div>
+          <div class="about-donating">
+            <img src="/static/img/bitcoin.png"/>
+            <span>Thanks for donating</span>
           </div>
         </div>
       </div>
@@ -369,6 +374,22 @@
   .about-contacts ul li a:hover {
     background-color: #FB383B;
     color: #fff;
+  }
+  .about-donating{
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+    border: 1px solid #000;
+    padding: 2px;
+  }
+  .about-donating img{
+    display: block;
+    width: 70px;
+    margin: 0px auto;
+  }
+  .about-donating span{
+    font-size: 12px;
+    color: #000;
   }
 
   .publish-uploader {
