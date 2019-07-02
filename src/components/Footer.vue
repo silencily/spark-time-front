@@ -4,7 +4,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <div class="copy-right">
-            <span>© 2018 Silencily</span>
+            <span>© 2019 Silencily</span>
             <span>Power by <a href="https://www.vuejs.org" target="_blank">vuejs.org</a> && <a
               href="https://www.iris-go.com" target="_blank">iris-go.com</a></span>
           </div>
@@ -94,7 +94,7 @@
     </el-dialog>
 
     <el-dialog
-      title="关于 Silencily"
+      title="About Silencily"
       :modal="false"
       :visible.sync="aboutShown"
       width="60%"
@@ -108,7 +108,7 @@
             <h3>Silencily | A Person</h3>
           </el-carousel-item>
           <el-carousel-item lable="programmer">
-            <img src="/static/img/person.jpg" height="100%" width="100%"/>
+            <img src="/static/img/programmer.png" height="100%" width="100%"/>
             <h3>Silencily | A Programmer</h3>
           </el-carousel-item>
           <el-carousel-item lable="father">

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header/>
+    <Header @fireLoadSparks="handleLoadSparks"/>
     <div class="main">
       <div class="waterfall">
         <spark v-for="(value,key,index) in sparkContainer" class="waterfall-item" :img-name="value.img_name"
@@ -33,27 +33,19 @@
         this.axios.get('./spark')
           .then((res) => {
             for (let spark of res.data) {
-                this.$set(this.sparkContainer, spark._id, spark)
+              this.$set(this.sparkContainer, spark._id, spark)
             }
           })
       },
       handleSparkDestroyed(id){
-        this.$delete(this.sparkContainer,id)
+        this.$delete(this.sparkContainer, id)
       },
-      buildLoadTimer(){
-        var loadTimer = setInterval(() => {
-          this.loadData()
-        }, 65 * 1000)
-        this.$once('hook:beforeDestroy', function () {
-          clearInterval(loadTimer)
-        })
+      handleLoadSparks(){
+        this.loadData()
       }
     },
     created(){
       this.loadData()
-    },
-    mounted: function () {
-      this.buildLoadTimer()
     }
   }
 </script>
