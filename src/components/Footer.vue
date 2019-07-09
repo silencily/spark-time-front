@@ -4,8 +4,8 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <div class="copy-right">
-            <span>© 2019 Silencily</span>
-            <span>Power by <a href="https://www.vuejs.org" target="_blank">vuejs.org</a> && <a
+            <span class="copy-right-author">© 2019 Silencily</span>
+            <span class="copy-right-power">Power by <a href="https://www.vuejs.org" target="_blank">vuejs.org</a> && <a
               href="https://www.iris-go.com" target="_blank">iris-go.com</a></span>
           </div>
         </el-col>
@@ -17,12 +17,10 @@
         <el-col :span="8">
           <div class="about">
             <a href="#" @click="showAbout">
-              <img class="avatar avatar-42" src="/static/img/avatar.jpg"
-                   width="42"
-                   height="42"
-                   alt="">
+              <img class="avatar" src="/static/img/avatar.jpg"
+                   alt="about silencily">
             </a>
-            <p>About Silencily</p>
+            <p class="about-author-name">About Silencily</p>
           </div>
         </el-col>
       </el-row>
@@ -30,14 +28,14 @@
     <el-dialog
       title="发布火花"
       :visible.sync="publishShown"
-      top="17vh"
-      width="45%"
+      top="16vh"
       :modal="false"
+      custom-class="publish-dialog"
       :close-on-click-modal="false"
       center>
       <div class="publish-dialog-content">
         <el-row :gutter="10">
-          <el-col :span="7">
+          <el-col :xs="7" :sm="7">
             <el-upload ref="publish"
                        class="publish-uploader"
                        name="sparkImage"
@@ -53,7 +51,7 @@
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
             </el-upload>
           </el-col>
-          <el-col :span="12">
+          <el-col :xs="10" :sm="12">
             <el-input
               type="textarea"
               class="publish-text" v-model="sparkContent"
@@ -62,7 +60,7 @@
               placeholder="发表火花文字（70字以内）">
             </el-input>
           </el-col>
-          <el-col :span="5">
+          <el-col :xs="7" :sm="5">
             <div>
               <el-image :fit="'fill'" style="width:100%;height: 50px;cursor: pointer;" v-on:click="getCaptcha"
                         :src="captcha">
@@ -96,9 +94,9 @@
     <el-dialog
       title="About Silencily"
       :modal="false"
+      top="16vh"
       :visible.sync="aboutShown"
-      width="60%"
-      top="18vh"
+      custom-class="about-dialog"
       :close-on-click-modal="false"
       center>
       <div class="about-dialog-content">
@@ -281,7 +279,11 @@
     color: #ffffff;
   }
 
-  .copy-right span {
+  .copy-right-author {
+    display: block;
+    padding: 5px 0;
+  }
+  .copy-right-power{
     display: block;
     padding: 5px 0;
   }
@@ -311,9 +313,6 @@
 
   .avatar {
     border-radius: 50%;
-  }
-
-  .avatar-42 {
     width: 42px;
     height: 42px;
   }
@@ -414,6 +413,31 @@
   .el-upload__tip {
     color: #FB383B;
   }
+  @media screen and (max-width: 768px) {
+    .copy-right-power{
+      display: none;
+    }
+    .about-author-name{
+      display: none;
+    }
+    .avatar{
+      width: 50px;
+      height: 50px;
+    }
+    .about-donating{
+      position: inherit;
+      margin-top: 5px;
+    }
+    .publish-uploader-icon{
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+    }
+    .publish-img{
+      width: 60px;
+      height: 60px;
+    }
+  }
 </style>
 <style>
   .publish-uploader .el-upload {
@@ -431,6 +455,12 @@
   .publish-text textarea {
     height: 160px;
   }
+  .publish-dialog{
+    width: 50%;
+  }
+  .about-dialog{
+    width: 60%;
+  }
 
   .image-slot {
     display: flex;
@@ -442,4 +472,16 @@
     color: #909399;
     font-size: 14px;
   }
+
+  @media screen and (max-width: 768px) {
+    .publish-dialog{
+      width: 100%;
+      margin-top: 15vh;
+    }
+    .about-dialog{
+      width: 100%;
+      margin-top: 15vh;
+    }
+  }
+
 </style>
