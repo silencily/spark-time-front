@@ -456,10 +456,10 @@
     height: 160px;
   }
   .publish-dialog{
-    width: 50%;
+    width: 50% !important;
   }
   .about-dialog{
-    width: 60%;
+    width: 60% !important;
   }
 
   .image-slot {
@@ -475,12 +475,12 @@
 
   @media screen and (max-width: 768px) {
     .publish-dialog{
-      width: 100%;
-      margin-top: 15vh;
+      width: 100% !important;
+      margin-top: 15vh !important;
     }
     .about-dialog{
-      width: 100%;
-      margin-top: 15vh;
+      width: 100% !important;
+      margin-top: 15vh !important;
     }
   }
 

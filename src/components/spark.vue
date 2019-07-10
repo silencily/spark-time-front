@@ -13,8 +13,8 @@
     </transition>
     <el-dialog
       :visible.sync="detailShown"
-      top="10vh"
-      width="50%"
+      top="16vh"
+      custom-class="spark-dialog"
       :close-on-click-modal="false"
       center>
       <div class="spark-dialog-content">
@@ -147,5 +147,16 @@
     width: 100%;
     display: block;
     cursor: pointer;
+  }
+
+</style>
+<style>
+  .spark-dialog{
+    width: 50% !important;
+  }
+  @media screen and (max-width: 768px) {
+    .spark-dialog{
+      width: 100% !important;
+    }
   }
 </style>
