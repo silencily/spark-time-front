@@ -4,7 +4,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <div class="copy-right">
-            <span class="copy-right-author">© 2019 Silencily</span>
+            <span class="copy-right-author">© 2019 Silencily <span style="font-size: 10px;color: #FB383B;">Beta</span></span>
             <span class="copy-right-power">Power by <a href="https://www.vuejs.org" target="_blank">vuejs.org</a> && <a
               href="https://www.iris-go.com" target="_blank">iris-go.com</a></span>
           </div>
@@ -101,17 +101,17 @@
       center>
       <div class="about-dialog-content">
         <el-carousel :interval="4000" type="card" height="200px">
-          <el-carousel-item lable="person">
+          <el-carousel-item lable="handsome guy">
             <img src="/static/img/person.jpg" height="100%" width="100%"/>
-            <h3>Silencily | A Person</h3>
-          </el-carousel-item>
-          <el-carousel-item lable="programmer">
-            <img src="/static/img/programmer.png" height="100%" width="100%"/>
-            <h3>Silencily | A Programmer</h3>
+            <h3>Silencily | A Handsome Guy</h3>
           </el-carousel-item>
           <el-carousel-item lable="father">
             <img src="/static/img/father.jpg" height="100%" width="100%"/>
             <h3>Silencily | A Father</h3>
+          </el-carousel-item>
+          <el-carousel-item lable="programmer">
+            <img src="/static/img/programmer.png" height="100%" width="100%"/>
+            <h3>Silencily | A Programmer</h3>
           </el-carousel-item>
         </el-carousel>
 
@@ -131,10 +131,6 @@
               </li>
               <li>
                 <a href="https://twitter.com/silencily" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-              </li>
-              <li>
-                <a href="https://plus.google.com/+silencilyseven" target="_blank"><i class="fa fa-google-plus"
-                                                                                     aria-hidden="true"></i></a>
               </li>
               <li>
                 <a href="https://www.linkedin.com/in/silencily-seven-915765175" target="_blank"><i
