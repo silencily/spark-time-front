@@ -7,7 +7,8 @@
           <div class="spark-content-inner">{{content}}</div>
         </div>
         <div class="spark-time">
-          <span>燃尽(秒)：<span :class="{'time-red':timeRed}">{{lifetime}}</span></span>
+          <span v-if="isAd" style="color: #6f7180;">广告-燃尽(秒)：<span :class="{'time-red':timeRed}">{{lifetime}}</span></span>
+          <span v-else>燃尽(秒)：<span :class="{'time-red':timeRed}">{{lifetime}}</span></span>
         </div>
       </el-card>
     </transition>
@@ -48,6 +49,9 @@
       id: {
         type: String,
         required: true
+      },
+      isAd: {
+        type: Boolean
       }
     },
     data(){
@@ -151,11 +155,12 @@
 
 </style>
 <style>
-  .spark-dialog{
+  .spark-dialog {
     width: 50% !important;
   }
+
   @media screen and (max-width: 768px) {
-    .spark-dialog{
+    .spark-dialog {
       width: 100% !important;
     }
   }

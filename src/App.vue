@@ -4,7 +4,7 @@
     <div class="main">
       <div class="waterfall">
         <spark v-for="(value,key,index) in sparkContainer" class="waterfall-item" :img-name="value.img_name"
-               :created-time="value.created_time" :content="value.content" :key="value._id" :id="value._id"
+               :created-time="value.created_time" :content="value.content" :key="value._id" :id="value._id" :isAd="value.is_ad"
                @sparkDestroyed="handleSparkDestroyed"/>
       </div>
     </div>
