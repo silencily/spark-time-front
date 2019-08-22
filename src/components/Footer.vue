@@ -211,10 +211,12 @@
 
         if (!isJPGPNG) {
           this.$message.error('上传火花图片只能是 JPG/PNG 格式!');
+          this.publishing = false
           return false
         }
         if (!isLt500K) {
           this.$message.error('上传火花图片大小不能超过 500KB!');
+          this.publishing = false
           return false
         }
         return true;
